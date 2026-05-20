@@ -1,0 +1,32 @@
+---
+# defaults file for k3s
+k3s_version: "v1.31.4+k3s1"
+
+k3s_cluster_token: "aaaaaaaaaaabbbbbbbbbbbbbbccccccccccccccccccdddddddddddddddd"
+
+k3s_write_kubeconfig_mode: "0644"
+
+k3s_disable_firewalld: true
+
+k3s_kubeconfig_local_path: "./kubeconfig"
+
+k3s_install_dir: /usr/local/bin
+
+k3s_config_dir: /etc/rancher/k3s
+
+k3s_systemd_dir: /etc/systemd/system
+
+k3s_api_endpoint: "{{ hostvars[groups['masters'][0]].ansible_host }}"
+
+k3s_server_binary_url: >-
+  https://github.com/k3s-io/k3s/releases/download/{{ k3s_version }}/k3s
+
+k3s_checksum_url: >-
+  https://github.com/k3s-io/k3s/releases/download/{{ k3s_version }}/sha256sum-amd64.txt
+
+k3s_tls_san:
+  - "{{ k3s_api_endpoint }}"
+
+k3s_disable:
+  - traefik
+  - servicelb

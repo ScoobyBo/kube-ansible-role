@@ -1,0 +1,13 @@
+[Unit]
+Description=Lightweight Kubernetes
+Documentation=https://k3s.io
+After=network-online.target
+
+[Service]
+Type=notify
+ExecStart={{ k3s_install_dir }}/k3s server --config {{ k3s_config_dir }}/config.yaml
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

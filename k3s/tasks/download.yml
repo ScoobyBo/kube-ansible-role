@@ -1,0 +1,18 @@
+---
+- name: download checksum 
+  get_url:
+    url: "{{ k3s_checksum_url }}"
+    dest: /tmp/k3s.sha256
+    mode: '0644'
+
+- name: read checksum 
+  shell: grep " k3s$" /tmp/k3s.sha256 | awk '{print $1}'
+  register: k3s_checksum
+  changed_when: false
+
+- name: download k3s bin
+  get_url:
+    url: "{{ k3s_server_binary_url }}"
+    dest: "{{ k3s_install_dir }}/k3s"
+    mode: '0755'
+    checksum: "sha256:{{ k3s_checksum.stdout }}"

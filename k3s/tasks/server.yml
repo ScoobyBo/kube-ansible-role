@@ -1,0 +1,24 @@
+---
+- name: render k3s server config
+  template:
+    src: config-server.yaml.j2
+    dest: "{{ k3s_config_dir }}/config.yaml"
+    mode: '0600'
+
+- name: rnder k3s system unit
+  template:
+    src: k3s.service.j2
+    dest: "{{ k3s_systemd_dir }}/k3s.service"
+    mode: '0644'
+  notify:
+    - restart k3s
+
+- name: rreload systemd
+  systemd:
+    daemon_reload: true
+
+- name: enable k3s
+  systemd:
+    name: k3s
+    enabled: true
+    state: started

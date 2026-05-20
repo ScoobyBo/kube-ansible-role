@@ -1,0 +1,23 @@
+write-kubeconfig-mode: "{{ k3s_write_kubeconfig_mode }}"
+
+token: "{{ k3s_cluster_token }}"
+
+{% if k3s_tls_san is defined and k3s_tls_san | length > 0 %}
+tls-san:
+{% for san in k3s_tls_san %}
+  - "{{ san }}"
+{% endfor %}
+{% endif %}
+
+{% if k3s_disable is defined and k3s_disable | length > 0 %}
+disable:
+{% for item in k3s_disable %}
+  - "{{ item }}"
+{% endfor %}
+{% endif %}
+
+{% if inventory_hostname == groups['masters'][0] %}
+cluster-init: true
+{% else %}
+server: "https://{{ k3s_api_endpoint }}:6443"
+{% endif %}

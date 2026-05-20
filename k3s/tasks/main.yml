@@ -1,0 +1,21 @@
+---
+- name: download k3s
+  import_tasks: download.yml
+# tasks file for k3s
+- name: include prereqs
+  import_tasks: prereqs.yml
+
+- name: configure masters
+  import_tasks: server.yml
+  when:
+    - inventory_hostname in groups['masters']
+
+- name: configure workers
+  import_tasks: agent.yml
+  when:
+    - inventory_hostname in groups['workers']
+
+- name: fetch config
+  import_tasks: kubeconfig.yml
+  when:
+    - inventory_hostname == groups['masters'][0]
