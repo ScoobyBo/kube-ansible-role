@@ -2,9 +2,7 @@
 # defaults file for k3s
 k3s_version: "v1.31.4+k3s1"
 
-k3s_cluster_token: "aaaaaaaaaaabbbbbbbbbbbbbbccccccccccccccccccdddddddddddddddd"
-
-k3s_write_kubeconfig_mode: "0644"
+k3s_write_kubeconfig_mode: "0640"
 
 k3s_disable_firewalld: true
 
@@ -30,3 +28,5 @@ k3s_tls_san:
 k3s_disable:
   - traefik
   - servicelb
+
+

@@ -34,14 +34,32 @@
 - name: gather service facts
   service_facts:
 
-- name: disable firewalld
-  service:
-    name: firewalld
-    state: stopped
-    enabled: false
-  when:
-    - k3s_disable_firewalld | default(false)
-    - "'firewalld.service' in ansible_facts.services"
+- name: install ufw
+  apt:
+    name: ufw
+    state: present
+    update_cache: true
+  when: k3s_manage_ufw | bool
+
+- name: allow ssh
+  community.general.ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+  when: k3s_manage_ufw | bool
+
+- name: allow k3s ports
+  community.general.ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+  loop: "{{ k3s_ufw_rules }}"
+  when: k3s_manage_ufw | bool
+
+- name: enable ufw
+  community.general.ufw:
+    state: enabled
+  when: k3s_manage_ufw | bool
 
 - name: create k3s config dir
   file:
