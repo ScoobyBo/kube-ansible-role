@@ -1,7 +1,7 @@
 ---
-- name: Render k3s secondary server config
+- name: Render bootstrap server config
   template:
-    src: config-server.yaml.j2
+    src: config-bootstrap.yaml.j2
     dest: "{{ k3s_config_dir }}/config.yaml"
     mode: '0600'
 
@@ -10,15 +10,23 @@
     src: k3s.service.j2
     dest: "{{ k3s_systemd_dir }}/k3s.service"
     mode: '0644'
+  notify:
+    - restart k3s
 
 - name: Reload systemd
   systemd:
     daemon_reload: true
 
-- name: Enable secondary k3s
+- name: Enable bootstrap k3s
   systemd:
     name: k3s
     enabled: true
     state: started
   async: 120
   poll: 0
+
+- name: Wait for Kubernetes API
+  wait_for:
+    host: "{{ k3s_api_endpoint }}"
+    port: 6443
+    timeout: 300

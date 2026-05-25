@@ -1,14 +1,20 @@
 ---
 - name: download k3s
   import_tasks: download.yml
-# tasks file for k3s
+
 - name: include prereqs
   import_tasks: prereqs.yml
 
-- name: configure masters
+- name: bootstrap first master
+  import_tasks: bootstrap.yml
+  when:
+    - inventory_hostname == groups['masters'][0]
+
+- name: configure secondary masters
   import_tasks: server.yml
   when:
     - inventory_hostname in groups['masters']
+    - inventory_hostname != groups['masters'][0]
 
 - name: configure workers
   import_tasks: agent.yml
