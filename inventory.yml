@@ -2,13 +2,9 @@ all:
   vars:
     ansible_user: vladislav
     ansible_become: true
-    ansible_ssh_private_key_file: ~/.ssh/id_ed25519
 
     k3s_version: "v1.31.4+k3s1"
-
-    k3s_cluster_token: "aaaaaaabbbbbbbccccccccddddddddfffffffffgggggggg"
-
-    k3s_api_endpoint: "192.168.0.24"
+    k3s_api_endpoint: "192.168.56.5"
 
     k3s_disable:
       - traefik
@@ -21,6 +17,7 @@ all:
 
         master-1:
           ansible_host: 192.168.0.24
+
 
           k3s_node_labels:
             - "node-role.kubernetes.io/control-plane=true"
@@ -41,10 +38,9 @@ all:
       hosts:
 
         worker-1:
+
           ansible_host: 192.168.0.22
 
-          k3s_node_labels:
-            - "workload=general"
 
         worker-2:
           ansible_host: 192.168.0.23
@@ -57,3 +53,8 @@ all:
       children:
         masters:
         workers:
+
+
+
+
+        
