@@ -8,7 +8,7 @@ all:
 
     k3s_cluster_token: "aaaaaaabbbbbbbccccccccddddddddfffffffffgggggggg"
 
-    k3s_api_endpoint: "192.168.56.10"
+    k3s_api_endpoint: "192.168.0.24"
 
     k3s_disable:
       - traefik
@@ -20,19 +20,38 @@ all:
       hosts:
 
         master-1:
-          ansible_host: 192.168.56.10
+          ansible_host: 192.168.0.24
 
           k3s_node_labels:
             - "node-role.kubernetes.io/control-plane=true"
+
+        master-2:
+          ansible_host: 192.168.0.26
+
+          k3s_node_labels:
+            - "node-role.kubernetes.io/control-plane=true"  
+
+#        master-3:
+#          ansible_host: 192.168.0.26
+#
+#          k3s_node_labels:
+#            - "node-role.kubernetes.io/control-plane=true"          
 
     workers:
       hosts:
 
         worker-1:
-          ansible_host: 192.168.56.12
+          ansible_host: 192.168.0.22
 
           k3s_node_labels:
             - "workload=general"
+
+        worker-2:
+          ansible_host: 192.168.0.23
+
+          k3s_node_labels:
+            - "workload=general"
+
 
     k3s_cluster:
       children:

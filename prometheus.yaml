@@ -1,0 +1,18 @@
+scrape_configs:
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets:
+        - '192.168.1.10:8080'  # IP менеджер-ноды 1
+        - '192.168.1.11:8080'  # IP воркер-ноды 1
+        - '192.168.1.12:8080'  # IP воркер-ноды 2
+        labels:
+          job: 'cadvisor'
+
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets:
+        - '192.168.1.10:9100'
+        - '192.168.1.11:9100'
+        - '192.168.1.12:9100'
+        labels:
+          job: 'node_exporter'
