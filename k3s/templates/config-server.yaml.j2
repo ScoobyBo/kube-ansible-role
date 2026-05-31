@@ -2,4 +2,11 @@ server: "https://{{ k3s_api_endpoint }}:6443"
 
 token: "{{ k3s_cluster_token }}"
 
+{% if k3s_disable is defined and k3s_disable | length > 0 %}
+disable:
+{% for item in k3s_disable %}
+  - {{ item }}
+{% endfor %}
+{% endif %}
+
 write-kubeconfig-mode: "{{ k3s_write_kubeconfig_mode }}"
