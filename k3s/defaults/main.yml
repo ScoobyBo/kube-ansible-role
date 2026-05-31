@@ -4,8 +4,6 @@ k3s_version: "v1.31.4+k3s1"
 
 k3s_write_kubeconfig_mode: "0640"
 
-k3s_disable_firewalld: true
-
 k3s_kubeconfig_local_path: "./kubeconfig"
 
 k3s_install_dir: /usr/local/bin
@@ -28,5 +26,17 @@ k3s_tls_san:
 k3s_disable:
   - traefik
   - servicelb
+
+
+k3s_manage_ufw: true
+
+
+k3s_ufw_rules:
+  - { port: "6443", proto: "tcp" }
+  - { port: "10250", proto: "tcp" }
+  - { port: "8472", proto: "udp" }
+  - { port: "2379:2380", proto: "tcp" }  
+
+
 
 
